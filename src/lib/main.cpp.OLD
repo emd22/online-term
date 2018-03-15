@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <thread>
+#include <stdlib.h>
+#include <net/net.hpp>
+
+#include <string.h>
+#include <err.hpp>
+
+static Net *net;
+
+void *on_message_get(char *msg) {
+    printf("Got message from server: %s\n", msg);
+}
+
+void *on_connect(int sfd) {
+    net->broadcast("Welcome client!");
+    printf("client connected\n");
+    return NULL;
+}
+
+void client_listener_function() {
+    net->server_listen(on_connect);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: <program-name><0|1>");
+        return 1;
+    }
+
+    std::string ip = "127.0.0.1"; //net_.get_host_ip("wlp4s0")
+
+    bool client;
+
+    if (!strcmp(argv[1], "0")) {
+        client = CLIENT;
+    }
+    else if (!strcmp(argv[1], "1")) {
+        client = SERVER;
+    }
+    else {
+        exit(1);
+    }
+
+    Error error;
+
+    Net net_(8088, ip, client, &error);
+    net = &net_;
+
+    if (!client) {
+        std::cout << "Join this server using the ip " << net->get_ip() << "!\n"; 
+
+        std::thread client_listener(client_listener_function);
+        client_listener.join();
+
+        std::cout << "Done\n";
+    }
+    
+    net->client_send("Fut");
+    
+    return 0;
+}
