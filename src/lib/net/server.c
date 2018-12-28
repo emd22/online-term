@@ -3,29 +3,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include <signal.h>
+#include <errno.h>
 
-#include <netdb.h>
 #include <unistd.h>
-#include <sys/un.h>
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <net/if.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
-#include <stdbool.h>
-
-#include <errno.h>
 
 int server_fd, new_sockfd, cli_len;
 struct sockaddr_in addr;
-vector_t /* std::vector<int> */ client_fds;
+int client_fds[MAX_CLIENTS];
+int client_index = 0;
 
 bool end = false;
 
 void server_error(const char *message) {
-    printf("Client error: %s --- %s\n", message, strerror(errno));
+    printf("Server error: %s --- %s\n", message, strerror(errno));
     exit(1);
 }
 
@@ -35,7 +30,8 @@ void serv_sig(int sig) {
     }
 }
 
-void server_init(int port, const string_t *ip) {
+void server_init(int port, const char *ip) {
+    memset(client_fds, 0, MAX_CLIENTS);
     signal(SIGINT, serv_sig);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -45,7 +41,7 @@ void server_init(int port, const string_t *ip) {
 
     memset((char *)&addr, 0, sizeof(addr));
 
-    in_addr_t ipaddr = inet_addr(ip->string);
+    in_addr_t ipaddr = inet_addr(ip);
 
     if (ipaddr == INADDR_NONE) {
         server_error("Error with ipaddr");
@@ -61,61 +57,75 @@ void server_init(int port, const string_t *ip) {
     if (ret < 0) {
         server_error("Error with binding. are you using the right network adapter?");
     }
-
-    vector_init(&client_fds);
 }
 
-void server_listen(void *(*on_connect)(int)) {
+void server_listen(void (*on_connect)(int, int), void (*client_left)(int *)) {
     listen(server_fd, 5);
     struct sockaddr_in cli_addr;
+    char buf[128];
 
     cli_len = sizeof(cli_addr);
 
     while (true) {
+        // check to see if there are clients to connect to
         new_sockfd = accept(server_fd, (struct sockaddr *)&cli_addr, (socklen_t *)&cli_len);
 
-        while (errno == EWOULDBLOCK) {
-            if (end)
-                return;
+        // sleep for 100ms
+        usleep(100);
+
+        if (server_read_last(buf) != NULL) {
+            switch (*buf) {
+                case 0x04:
+                    client_left(&client_index);
+                    break;
+                default:
+                    printf("msg = %s\n", buf);
+                    break;
+            }
         }
 
+        // not a successful socket run, check again.
         if (new_sockfd < 0) {
-            server_error("Error with accepting client");
+            if (end)
+                return;
+            continue;
         }
-        vector_add(&client_fds, &new_sockfd);
-        on_connect(new_sockfd);
+
+        // add client to client list
+        client_fds[client_index++] = new_sockfd;
+        // successful connection!
+        on_connect(new_sockfd, client_index);
     }
 }
 
 char *server_read(int fd, char *dat) {
     int rsize = 0;
 
-    memset(dat, 0, 1024);
+    memset(dat, 0, 128);
 
-    rsize = recv(fd, dat, 1024, 0);
-    if (rsize == -1) {
-        server_error("Error reading from client");
+    rsize = recv(fd, dat, 128, 0);
+    // if (rsize == -1) {
+    //     server_error("Error reading from client");
+    //     return NULL;
+    // }
+    if (rsize <= 0)
         return NULL;
-    }
-    if (rsize == 0)
-        return NULL;
+
     return dat;
 }
 
-void server_send(int fd, const string_t *message) {
+void server_send(int fd, char *message) {
     int ret = 0;
-
-    ret = send(fd, message->string, message->used, 0);
+    ret = send(fd, message, strlen(message), 0);
     if (ret < 0) {
         server_error("Error sending to client");
     }
     if (ret == 0) {
         int pos = 0;
-        int *vget = NULL;
-        for (; pos < client_fds.used; pos++) {
-            vget = (int *)vector_get(&client_fds, pos);
-            if (*vget == fd) {
-                vector_remove(&client_fds, pos);
+        for (; pos < client_index; pos++) {
+            if (client_fds[pos] == fd) {
+                // vector_remove(&client_fds, pos);
+                //TODO: FIX 
                 printf("Client %d left.\n", pos);
                 break;
             }
@@ -123,51 +133,27 @@ void server_send(int fd, const string_t *message) {
     }
 }
 
-void server_broadcast(const string_t *message) {
-    int len = client_fds.used;
-    int *vget = NULL;
-
-    for (int i = 0; i < len; i++) {
-        vget = (int *)vector_get(&client_fds, i);
-        server_send(*vget, message);
-    }
+void server_broadcast(char *message) {
+    for (int i = 0; i < client_index; i++)
+        server_send(client_fds[i], message);
 }
 
-void server_kick(int fd, const string_t *msg) {
+void server_kick(int fd, char *msg) {
     server_send(fd, msg);
     close(fd);
 }
 
-vector_t server_read_all() {
-    vector_t dat_vec;
-    vector_init(&dat_vec);
-    
-    int len = client_fds.used;
-    char *dat = (char *)malloc(DAT_SIZE);
-    int *vget = NULL;
-
-    for (int i = 0; i < len; i++) {
-        vget = (int *)vector_get(&client_fds, i);
-        if (server_read(*vget, dat) != NULL) {
-            data_t data;
-            string_cat_c(&data.dat, dat);
-            data.fd = *vget;
-            data.index = i;
-            vector_add(&dat_vec, &data);
+char *server_read_last(char *buf) {
+    int i;
+    memset(buf, 0, 128);
+    for (i = 0; i < client_index; i++) {
+        if (server_read(client_fds[i], buf) != NULL) {
+            return buf;
         }
     }
-    
-    free(dat);
-    return dat_vec;
-}
-
-void server_destroy_readings(vector_t *dat_vec) {
-    int i;
-    for (i = 0; i < dat_vec->used; i++) {
-        string_free(&((data_t *)vector_get(dat_vec, i))->dat);
-    }
+    return NULL;
 }
 
 void server_destroy(void) {
-    vector_free(&client_fds);
+    return;
 }

@@ -8,8 +8,6 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/ethan/Desktop/net-c/src/lib/net/client.c" "/home/ethan/Desktop/net-c/build/CMakeFiles/lib.dir/lib/net/client.c.o"
   "/home/ethan/Desktop/net-c/src/lib/net/net.c" "/home/ethan/Desktop/net-c/build/CMakeFiles/lib.dir/lib/net/net.c.o"
   "/home/ethan/Desktop/net-c/src/lib/net/server.c" "/home/ethan/Desktop/net-c/build/CMakeFiles/lib.dir/lib/net/server.c.o"
-  "/home/ethan/Desktop/net-c/src/lib/nstring.c" "/home/ethan/Desktop/net-c/build/CMakeFiles/lib.dir/lib/nstring.c.o"
-  "/home/ethan/Desktop/net-c/src/lib/vector.c" "/home/ethan/Desktop/net-c/build/CMakeFiles/lib.dir/lib/vector.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

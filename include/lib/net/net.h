@@ -12,7 +12,6 @@
 #include <net/server.h>
 #include <net/client.h>
 
-#include <vector.h>
 #include <string.h>
 
 #if defined(__linux__) || defined(__APPLE__)
@@ -31,7 +30,7 @@ typedef struct sockaddr_in addr_t;
 #define DAT_SIZE 1024
 
 char *net_get_default_device(void);
-string_t net_get_ip(addr_t *addr);
-string_t net_get_host_ip(const char *adapter);
+char *net_get_ip(addr_t *addr, char *ipstr);
+char *net_get_host_ip(char *adapter);
 
 #endif

@@ -6,22 +6,19 @@
 #include <errno.h>
 #include <signal.h>
 
-#include <netdb.h>
-#include <unistd.h>
-#include <sys/un.h>
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <net/if.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 #include <stdbool.h>
+
+#define PACK_LEAVING 0x04
 
 int client_fd;
 int server_fd;
 struct sockaddr_in server, server_addr;
 int port;
-string_t server_ip;
+char server_ip[32];
 
 static bool end;
 
@@ -32,11 +29,15 @@ void client_error(const char *message) {
 
 void cli_sig(int sig) {
     if (sig == SIGINT) {
-        end = true;
+        char packet[16];
+        packet[0] = PACK_LEAVING;
+        packet[1] = 0;
+        client_send(packet);
+        exit(1);
     }
 }
 
-void client_init(int port_, const string_t *ip) {
+void client_init(int port_, const char *ip) {
     signal(SIGINT, cli_sig);
 
     client_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -46,7 +47,7 @@ void client_init(int port_, const string_t *ip) {
     //init socket struct
     memset((char *)&server, 0, sizeof(server));
 
-    in_addr_t ipaddr = inet_addr(ip->string);
+    in_addr_t ipaddr = inet_addr(ip);
 
     if (ipaddr == INADDR_NONE) {
         client_error("Error with ipaddr");
@@ -56,12 +57,11 @@ void client_init(int port_, const string_t *ip) {
     server.sin_addr.s_addr = ipaddr;
     server.sin_port = htons(port_);
 
-    string_new(&server_ip);
-    string_copy(&server_ip, ip);
+    memcpy(server_ip, ip, 32);
     port = port_;
     end = false;
 
-    // int ret = inet_pton(AF_INET, server_ip.c_str(), &server_addr.sin_addr);
+    // int ret = inet_pton(AF_INET, server_ip, &server_addr.sin_addr);
     // if (ret <= 0) {
     //     client_error("Error with inet_pton\n");
     // }
@@ -81,15 +81,16 @@ void client_listen(void *(*on_data_get)(const char *)) {
         if (end)
             break;
     }
+
     free(buf);
 }
 
 char *client_read(char *dat) {
     int rsize = 0;
 
-    memset(dat, 0, 1024);
+    memset(dat, 0, 128);
 
-    rsize = recv(client_fd, dat, 1024, 0);
+    rsize = recv(client_fd, dat, 128, 0);
     
     if (rsize == -1) {
         client_error("Error reading from server");
@@ -103,24 +104,11 @@ char *client_read(char *dat) {
 void client_send(const char *dat) {
     int ret = 0;
 
-    // ret = connect(client_fd, (sockaddr *)&addr, sizeof(addr));
-    // if (ret < 0) {
-    //     client_error("Error with client connecting");
-    // }
-
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(port);
-
-    ret = inet_pton(AF_INET, server_ip.string, &server_addr.sin_addr);
-    if (ret <= 0) {
-        client_error("Error with inet_pton\n");
-    }
-
-    if (send(client_fd, dat, strlen(dat), 0) == -1) {
+    if (send(client_fd, dat, strlen(dat), 0) < 0) {
         client_error("Error sending from client");
     }
 }
 
 void client_destroy(void) {
-    string_free(&server_ip);
+    return;
 }

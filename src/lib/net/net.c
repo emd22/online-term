@@ -1,6 +1,5 @@
 #include <net/net.h>
 
-#include <nstring.h>
 #include <string.h>
 
 #ifdef UNIX
@@ -13,36 +12,33 @@
 
 char *net_get_default_device(void) {
     FILE *f;
-    char line[100], *p, *c;
+    char line[128], *p, *c;
     
     f = fopen("/proc/net/route", "r");
     
-    while (fgets(line, 100, f)) {
+    while (fgets(line, 128, f)) {
         p = strtok(line, " \t");
         c = strtok(NULL, " \t");
         
         if (p != NULL && c != NULL) {
             if (strcmp(c, "00000000") == 0) {
-                printf("found dev %s\n", p);
+                fclose(f);
                 return p;
             }
         }
     }
 }
 
-string_t net_get_ip(addr_t *addr) {
+char *net_get_ip(addr_t *addr, char *ipstr) {
     struct in_addr ip_addr = addr->sin_addr;
-    string_t ip;
-    string_new(&ip);
-    char cstr[32];
+    memset(ipstr, 0, 32);
 
-    inet_ntop(AF_INET, &ip_addr, cstr, IP_STR_LEN);
+    inet_ntop(AF_INET, &ip_addr, ipstr, IP_STR_LEN);
 
-    string_cat_c(&ip, cstr);
-    return ip;
+    return ipstr;
 }
 
-string_t net_get_host_ip(const char *adapter) {
+char *net_get_host_ip(char *adapter) {
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
     struct ifreq ifr;
 
@@ -52,14 +48,10 @@ string_t net_get_host_ip(const char *adapter) {
     ioctl(fd, SIOCGIFADDR, &ifr);
 
     close(fd);
-
-    string_t ip;
-    string_new(&ip);
-    char *inet = inet_ntoa(((addr_t *)&ifr.ifr_addr)->sin_addr);
-    printf("INET = %s\n", inet);
-    string_cat_c(&ip, inet);
-
-    return ip;
+    
+    char *inet = inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+    printf("INET: %s\n", inet);
+    return inet;
 }
 
 #endif

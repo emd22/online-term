@@ -40,6 +40,8 @@
         "string.h": "c",
         "vector": "cpp",
         "log.h": "c",
-        "nstring.h": "c"
+        "nstring.h": "c",
+        "ioctl.h": "c",
+        "socket.h": "c"
     }
 }

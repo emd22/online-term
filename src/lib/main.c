@@ -5,31 +5,22 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include <unistd.h>
+
 bool client;
-
-string_t ip;
 int port;
+char ip[32];
 
-void arg_check(char *argv[]) {
-    if (!strcmp(argv[1], "0")) {
-        client = true;
-    }
-    else if (!strcmp(argv[1], "1")) {
-        client = false;
-    }
-    else {
-        exit(1);
-    }
+void on_connect(int client_fd, int client_index) {
+    printf("client %d has connected.\n", client_index);
+    server_send(client_fd, "Hello, new client!");
 }
 
-void *on_connect(int client_fd) {
-    printf("client %d has connected.\n", client_fd);
+void client_left(int *client_index) {
+    printf("client %d left.\n", *client_index);
+    server_broadcast("a client has left");
 
-    string_t out;
-    string_new(&out);
-    string_cat_c(&out, "Hello, new client!");
-    server_broadcast(&out);
-    string_free(&out);
+    (*client_index)--;
 }
 
 void *on_data_get(const char *dat) {
@@ -37,41 +28,83 @@ void *on_data_get(const char *dat) {
 }
 
 void server_start() {
-    printf("Join this server using port %d and ip %s!\n", port, ip.string);
+    printf("Join this server using port %d and ip %s!\n", port, ip);
 
-    server_init(port, &ip);
-    server_listen(on_connect);
+    server_init(port, ip);
+    server_listen(on_connect, client_left);
 }
 
 void client_start() {
-    client_init(port, &ip);
+    client_init(port, ip);
+    // client_send("Hello, server.");
     client_listen(on_data_get);
 }
 
 int main(int argc, char *argv[]) {
     client = false;
     
-    if (argc != 2) {
-        puts("Usage: <program-name> <0|1>");
+    int option;
+    char *ipstr = NULL;
+
+    while ((option = getopt(argc, argv, "hsci:")) != -1) {
+        switch (option) {
+            case 's': // Server option
+                client = false;
+                break;
+            case 'c': // Client option
+                client = true;
+                break;
+            case 'i': // Implicit set IP address
+                ipstr = optarg;
+                break;
+            case '?':
+                if (optopt == 'i')
+                    fprintf(stderr, "IP setting requires ip string:\n\t<prog name> -i 127.0.0.1\n");
+                else
+                    fprintf(stderr, "Unknown option '-%c'", optopt);
+                return 1;
+            case 'h':
+                printf(
+                    "Options:\n"
+                    "   -s: start as server\n"
+                    "   -c: start as client\n"
+                    "   -i: set ip address\n"
+                );
+                return 0;
+            default:
+                return 0;
+        };
+    }
+    int i;
+    for (i = optind; i < argc; i++) {
+        printf("Unknown argument %s\n", argv[i]);
+    }
+
+    if ((ipstr == NULL || !strcmp(ipstr, "default")) && client == true) {
+        printf("Client connection requires ip argument.\n\t<prog name> -i 127.0.0.1\n");
         return 1;
     }
-    arg_check(argv);
 
-    string_new(&ip);
+    if (ipstr == NULL || !strcmp(ipstr, "default")) {
+        char def_dev[32];
+        memset(def_dev, 0, 32);
+        strcpy(def_dev, net_get_default_device());
 
-    string_t host_ip = net_get_host_ip(net_get_default_device());
-    string_copy(&ip, &host_ip);
-    string_free(&host_ip);
+        printf("Using default device [%s]\n", def_dev);
+        ipstr = net_get_host_ip(def_dev);
+    }
 
+    memcpy(ip, ipstr, 32);
     port = 8088;
 
     if (client) {
+        printf("Starting client...\n\n");
         client_start();
         client_destroy();
     }
     else {
+        printf("Starting server...\n\n");
         server_start();
         server_destroy();
     }
-    string_free(&ip);
 }
