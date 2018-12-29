@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/ethan/Desktop/net-c/src/../include/lib/net/client.h
+/home/ethan/Projects/online-term/src/../include/lib/net/client.h
 netinet/in.h
 -
 
-/home/ethan/Desktop/net-c/src/../include/lib/net/net.h
+/home/ethan/Projects/online-term/src/../include/lib/net/net.h
 net/server.h
 -
 net/client.h
@@ -20,11 +20,11 @@ string.h
 netinet/in.h
 -
 
-/home/ethan/Desktop/net-c/src/../include/lib/net/server.h
+/home/ethan/Projects/online-term/src/../include/lib/net/server.h
 netinet/in.h
 -
 
-/home/ethan/Desktop/net-c/src/lib/main.c
+/home/ethan/Projects/online-term/src/lib/main.c
 net/net.h
 -
 stdio.h
@@ -38,7 +38,7 @@ stdbool.h
 unistd.h
 -
 
-/home/ethan/Desktop/net-c/src/lib/net/client.c
+/home/ethan/Projects/online-term/src/lib/net/client.c
 net/client.h
 -
 stdio.h
@@ -60,7 +60,7 @@ fcntl.h
 stdbool.h
 -
 
-/home/ethan/Desktop/net-c/src/lib/net/net.c
+/home/ethan/Projects/online-term/src/lib/net/net.c
 net/net.h
 -
 string.h
@@ -76,7 +76,7 @@ arpa/inet.h
 stdio.h
 -
 
-/home/ethan/Desktop/net-c/src/lib/net/server.c
+/home/ethan/Projects/online-term/src/lib/net/server.c
 net/server.h
 -
 stdlib.h
@@ -89,6 +89,8 @@ stdbool.h
 -
 signal.h
 -
+errno.h
+-
 unistd.h
 -
 sys/socket.h
@@ -96,7 +98,5 @@ sys/socket.h
 arpa/inet.h
 -
 fcntl.h
--
-errno.h
 -
 

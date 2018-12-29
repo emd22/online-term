@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 
-char *net_get_default_device(void) {
+char *net_get_default_device(char *dev) {
     FILE *f;
     char line[128], *p, *c;
     
@@ -22,18 +22,21 @@ char *net_get_default_device(void) {
         
         if (p != NULL && c != NULL) {
             if (strcmp(c, "00000000") == 0) {
-                fclose(f);
-                return p;
+                // printf("found dev %s\n", p);
+                // we found the device we need!
+                strcpy(dev, p);
+                return dev;
             }
         }
     }
+    return NULL;
 }
 
-char *net_get_ip(addr_t *addr, char *ipstr) {
+char *net_get_ip(struct sockaddr_in *addr, char *ipstr) {
     struct in_addr ip_addr = addr->sin_addr;
     memset(ipstr, 0, 32);
 
-    inet_ntop(AF_INET, &ip_addr, ipstr, IP_STR_LEN);
+    inet_ntop(AF_INET, &ip_addr, ipstr, 32);
 
     return ipstr;
 }

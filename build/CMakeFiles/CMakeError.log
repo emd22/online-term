@@ -1,24 +1,24 @@
 Determining if the pthread_create exist failed with the following output:
-Change Dir: /home/ethan/Desktop/net-c/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ethan/Projects/online-term/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_fa33b/fast"
-/usr/bin/make -f CMakeFiles/cmTC_fa33b.dir/build.make CMakeFiles/cmTC_fa33b.dir/build
-make[1]: Entering directory '/home/ethan/Desktop/net-c/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_fa33b.dir/CheckSymbolExists.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_fa33b.dir/CheckSymbolExists.c.o   -c /home/ethan/Desktop/net-c/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_fa33b
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fa33b.dir/link.txt --verbose=1
-/usr/bin/cc      CMakeFiles/cmTC_fa33b.dir/CheckSymbolExists.c.o  -o cmTC_fa33b 
-CMakeFiles/cmTC_fa33b.dir/CheckSymbolExists.c.o: In function `main':
-CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+Run Build Command:"/usr/bin/make" "cmTC_2b063/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2b063.dir/build.make CMakeFiles/cmTC_2b063.dir/build
+make[1]: Entering directory '/home/ethan/Projects/online-term/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2b063.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_2b063.dir/CheckSymbolExists.c.o   -c /home/ethan/Projects/online-term/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_2b063
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2b063.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_2b063.dir/CheckSymbolExists.c.o  -o cmTC_2b063 
+CMakeFiles/cmTC_2b063.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_fa33b.dir/build.make:86: recipe for target 'cmTC_fa33b' failed
-make[1]: *** [cmTC_fa33b] Error 1
-make[1]: Leaving directory '/home/ethan/Desktop/net-c/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_fa33b/fast' failed
-make: *** [cmTC_fa33b/fast] Error 2
+CMakeFiles/cmTC_2b063.dir/build.make:97: recipe for target 'cmTC_2b063' failed
+make[1]: *** [cmTC_2b063] Error 1
+make[1]: Leaving directory '/home/ethan/Projects/online-term/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_2b063/fast' failed
+make: *** [cmTC_2b063/fast] Error 2
 
-File /home/ethan/Desktop/net-c/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /home/ethan/Projects/online-term/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <pthread.h>
 

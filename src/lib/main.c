@@ -46,7 +46,9 @@ int main(int argc, char *argv[]) {
     int option;
     char *ipstr = NULL;
 
-    while ((option = getopt(argc, argv, "hsci:")) != -1) {
+    port = NET_DEFAULT_PORT;
+
+    while ((option = getopt(argc, argv, "hsci:p:")) != -1) {
         switch (option) {
             case 's': // Server option
                 client = false;
@@ -57,12 +59,21 @@ int main(int argc, char *argv[]) {
             case 'i': // Implicit set IP address
                 ipstr = optarg;
                 break;
+            case 'p':
+                if (!strcmp(optarg, "default"))
+                    break;
+                printf("arg: %s\n", optarg);
+                port = atoi(optarg);
+                break;
             case '?':
                 if (optopt == 'i')
-                    fprintf(stderr, "IP setting requires ip string:\n\t<prog name> -i 127.0.0.1\n");
+                    fprintf(stderr, "IP setting requires ip string:\n\t%s -i 127.0.0.1\n", argv[0]);
+                else if (optopt == 'p')
+                    fprintf(stderr, "Port setting requires port number:\n\t%s -p 8088\n", argv[0]);
                 else
                     fprintf(stderr, "Unknown option '-%c'", optopt);
                 return 1;
+
             case 'h':
                 printf(
                     "Options:\n"
@@ -88,14 +99,16 @@ int main(int argc, char *argv[]) {
     if (ipstr == NULL || !strcmp(ipstr, "default")) {
         char def_dev[32];
         memset(def_dev, 0, 32);
-        strcpy(def_dev, net_get_default_device());
+        if (net_get_default_device(def_dev) == NULL) {
+            printf("Cannot find default device, please set ip implictly.\n");
+            return 1;
+        }
 
         printf("Using default device [%s]\n", def_dev);
         ipstr = net_get_host_ip(def_dev);
     }
 
     memcpy(ip, ipstr, 32);
-    port = 8088;
 
     if (client) {
         printf("Starting client...\n\n");
