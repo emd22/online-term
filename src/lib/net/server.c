@@ -1,4 +1,5 @@
 #include <net/server.h>
+#include <net/packet.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,10 +15,17 @@
 
 int server_fd, new_sockfd, cli_len;
 struct sockaddr_in addr;
-int client_fds[MAX_CLIENTS];
-int client_index = 0;
+
+client_t clients[MAX_CLIENTS];
 
 bool end = false;
+
+void generate_random_id(client_t *client) {
+    int i;
+    for (i = 0; i < 8; i++) {
+        client->id[i] = rand()%(90-65+1)+65;
+    }
+}
 
 void server_error(const char *message) {
     printf("Server error: %s --- %s\n", message, strerror(errno));
@@ -30,8 +38,23 @@ void serv_sig(int sig) {
     }
 }
 
+client_t *find_free_client(int *index) {
+    int i;
+    client_t *this_client;
+    for (i = 0; i < MAX_CLIENTS; i++) {
+        this_client = &clients[i];
+
+
+        if (!this_client->used) {
+            (*index) = i;
+            return this_client;
+        }
+    }
+    return NULL;
+}
+
 void server_init(int port, const char *ip) {
-    memset(client_fds, 0, MAX_CLIENTS);
+    memset(clients, 0, sizeof(client_t)*MAX_CLIENTS);
     signal(SIGINT, serv_sig);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -59,10 +82,11 @@ void server_init(int port, const char *ip) {
     }
 }
 
-void server_listen(void (*on_connect)(int, int), void (*client_left)(int *)) {
+void server_listen(void (*on_connect)(int, int), void (*client_left)(char), void (*on_data_get)(int, char *)) {
     listen(server_fd, 5);
     struct sockaddr_in cli_addr;
     char buf[128];
+    int sender;
 
     cli_len = sizeof(cli_addr);
 
@@ -73,15 +97,12 @@ void server_listen(void (*on_connect)(int, int), void (*client_left)(int *)) {
         // sleep for 100ms
         usleep(100);
 
-        if (server_read_last(buf) != NULL) {
-            switch (*buf) {
-                case 0x04:
-                    client_left(&client_index);
-                    break;
-                default:
-                    printf("msg = %s\n", buf);
-                    break;
+        if (server_read_last(buf, &sender) != NULL) {
+            if (buf[0] == 0x02 && buf[1] == CLIENT_LEFT) {
+                printf("client %d left.\n", buf[2]);
+                clients[(int)(buf[2])].used = 0;
             }
+            on_data_get(sender, buf);
         }
 
         // not a successful socket run, check again.
@@ -92,7 +113,17 @@ void server_listen(void (*on_connect)(int, int), void (*client_left)(int *)) {
         }
 
         // add client to client list
-        client_fds[client_index++] = new_sockfd;
+        int client_index;
+        client_t *new_client = find_free_client(&client_index);
+        if (new_client == NULL) {
+            printf("Cannot accept client(Lobby full)\n");
+            continue;
+        }
+        new_client->fd = new_sockfd;
+        generate_random_id(new_client);
+        new_client->used = true;
+        char meta[] = NET_SEND_CLIENT_META(client_index);
+        server_send(new_sockfd, meta);
         // successful connection!
         on_connect(new_sockfd, client_index);
     }
@@ -104,10 +135,6 @@ char *server_read(int fd, char *dat) {
     memset(dat, 0, 128);
 
     rsize = recv(fd, dat, 128, 0);
-    // if (rsize == -1) {
-    //     server_error("Error reading from client");
-    //     return NULL;
-    // }
     if (rsize <= 0)
         return NULL;
 
@@ -120,22 +147,16 @@ void server_send(int fd, char *message) {
     if (ret < 0) {
         server_error("Error sending to client");
     }
-    if (ret == 0) {
-        int pos = 0;
-        for (; pos < client_index; pos++) {
-            if (client_fds[pos] == fd) {
-                // vector_remove(&client_fds, pos);
-                //TODO: FIX 
-                printf("Client %d left.\n", pos);
-                break;
-            }
-        }
-    }
 }
 
-void server_broadcast(char *message) {
-    for (int i = 0; i < client_index; i++)
-        server_send(client_fds[i], message);
+void server_broadcast(char *message, int sender) {
+    client_t *this_client;
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        this_client = &clients[i];
+        if (!this_client->used || i == sender)
+            continue;
+        server_send(this_client->fd, message);
+    }
 }
 
 void server_kick(int fd, char *msg) {
@@ -143,11 +164,13 @@ void server_kick(int fd, char *msg) {
     close(fd);
 }
 
-char *server_read_last(char *buf) {
+char *server_read_last(char *buf, int *sender) {
     int i;
     memset(buf, 0, 128);
-    for (i = 0; i < client_index; i++) {
-        if (server_read(client_fds[i], buf) != NULL) {
+    for (i = 0; i < MAX_CLIENTS; i++) {
+        if (server_read(clients[i].fd, buf) != NULL) {
+            (*sender) = i;
+            printf("%d sent us (%s)\n", i, buf);
             return buf;
         }
     }

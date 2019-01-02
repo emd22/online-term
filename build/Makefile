@@ -123,6 +123,87 @@ lib/fast:
 	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/build
 .PHONY : lib/fast
 
+lib/game.o: lib/game.c.o
+
+.PHONY : lib/game.o
+
+# target to build an object file
+lib/game.c.o:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/game.c.o
+.PHONY : lib/game.c.o
+
+lib/game.i: lib/game.c.i
+
+.PHONY : lib/game.i
+
+# target to preprocess a source file
+lib/game.c.i:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/game.c.i
+.PHONY : lib/game.c.i
+
+lib/game.s: lib/game.c.s
+
+.PHONY : lib/game.s
+
+# target to generate assembly for a file
+lib/game.c.s:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/game.c.s
+.PHONY : lib/game.c.s
+
+lib/interface/keyboard.o: lib/interface/keyboard.c.o
+
+.PHONY : lib/interface/keyboard.o
+
+# target to build an object file
+lib/interface/keyboard.c.o:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/keyboard.c.o
+.PHONY : lib/interface/keyboard.c.o
+
+lib/interface/keyboard.i: lib/interface/keyboard.c.i
+
+.PHONY : lib/interface/keyboard.i
+
+# target to preprocess a source file
+lib/interface/keyboard.c.i:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/keyboard.c.i
+.PHONY : lib/interface/keyboard.c.i
+
+lib/interface/keyboard.s: lib/interface/keyboard.c.s
+
+.PHONY : lib/interface/keyboard.s
+
+# target to generate assembly for a file
+lib/interface/keyboard.c.s:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/keyboard.c.s
+.PHONY : lib/interface/keyboard.c.s
+
+lib/interface/ui.o: lib/interface/ui.c.o
+
+.PHONY : lib/interface/ui.o
+
+# target to build an object file
+lib/interface/ui.c.o:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/ui.c.o
+.PHONY : lib/interface/ui.c.o
+
+lib/interface/ui.i: lib/interface/ui.c.i
+
+.PHONY : lib/interface/ui.i
+
+# target to preprocess a source file
+lib/interface/ui.c.i:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/ui.c.i
+.PHONY : lib/interface/ui.c.i
+
+lib/interface/ui.s: lib/interface/ui.c.s
+
+.PHONY : lib/interface/ui.s
+
+# target to generate assembly for a file
+lib/interface/ui.c.s:
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/ui.c.s
+.PHONY : lib/interface/ui.c.s
+
 lib/main.o: lib/main.c.o
 
 .PHONY : lib/main.o
@@ -240,6 +321,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... lib"
+	@echo "... lib/game.o"
+	@echo "... lib/game.i"
+	@echo "... lib/game.s"
+	@echo "... lib/interface/keyboard.o"
+	@echo "... lib/interface/keyboard.i"
+	@echo "... lib/interface/keyboard.s"
+	@echo "... lib/interface/ui.o"
+	@echo "... lib/interface/ui.i"
+	@echo "... lib/interface/ui.s"
 	@echo "... lib/main.o"
 	@echo "... lib/main.i"
 	@echo "... lib/main.s"

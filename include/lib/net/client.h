@@ -11,9 +11,11 @@
 #endif
 
 void client_init(int port, const char *ip);
-void client_listen(void *(*on_data_get)(const char *));
+void client_listen(void (*on_data_get)(char *));
 char *client_read(char *dat);
 void client_send(const char *dat);
 void client_destroy(void);
+void client_kill(void);
+void client_set_kill_callback(void (*_kill_callback)(void));
 
 #endif

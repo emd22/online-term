@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+/home/ethan/Projects/online-term/src/../include/lib/game.h
+
+/home/ethan/Projects/online-term/src/../include/lib/interface/keyboard.h
+
+/home/ethan/Projects/online-term/src/../include/lib/interface/ui.h
+stdio.h
+-
+
 /home/ethan/Projects/online-term/src/../include/lib/net/client.h
 netinet/in.h
 -
@@ -20,12 +28,62 @@ string.h
 netinet/in.h
 -
 
+/home/ethan/Projects/online-term/src/../include/lib/net/packet.h
+
 /home/ethan/Projects/online-term/src/../include/lib/net/server.h
 netinet/in.h
 -
 
+/home/ethan/Projects/online-term/src/lib/game.c
+pthread.h
+-
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+stdbool.h
+-
+game.h
+-
+net/net.h
+-
+net/packet.h
+-
+interface/ui.h
+-
+interface/keyboard.h
+-
+
+/home/ethan/Projects/online-term/src/lib/interface/keyboard.c
+interface/keyboard.h
+-
+termios.h
+-
+stdio.h
+-
+
+/home/ethan/Projects/online-term/src/lib/interface/ui.c
+interface/ui.h
+-
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+signal.h
+-
+sys/ioctl.h
+-
+
 /home/ethan/Projects/online-term/src/lib/main.c
 net/net.h
+-
+game.h
 -
 stdio.h
 -
@@ -40,6 +98,8 @@ unistd.h
 
 /home/ethan/Projects/online-term/src/lib/net/client.c
 net/client.h
+-
+net/packet.h
 -
 stdio.h
 -
@@ -58,6 +118,8 @@ arpa/inet.h
 fcntl.h
 -
 stdbool.h
+-
+pthread.h
 -
 
 /home/ethan/Projects/online-term/src/lib/net/net.c
@@ -78,6 +140,8 @@ stdio.h
 
 /home/ethan/Projects/online-term/src/lib/net/server.c
 net/server.h
+-
+net/packet.h
 -
 stdlib.h
 -

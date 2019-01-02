@@ -1,4 +1,7 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/lib.dir/lib/game.c.o"
+  "CMakeFiles/lib.dir/lib/interface/keyboard.c.o"
+  "CMakeFiles/lib.dir/lib/interface/ui.c.o"
   "CMakeFiles/lib.dir/lib/main.c.o"
   "CMakeFiles/lib.dir/lib/net/client.c.o"
   "CMakeFiles/lib.dir/lib/net/net.c.o"

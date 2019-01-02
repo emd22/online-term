@@ -1,4 +1,5 @@
 #include <net/net.h>
+#include <game.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,43 +8,44 @@
 
 #include <unistd.h>
 
+#define ISNUM(ch) (ch >= '0' && ch <= '9')
+
 bool client;
 int port;
 char ip[32];
 
 void on_connect(int client_fd, int client_index) {
     printf("client %d has connected.\n", client_index);
-    server_send(client_fd, "Hello, new client!");
+    // server_send(client_fd, "Hello, new client!");
 }
 
-void client_left(int *client_index) {
-    printf("client %d left.\n", *client_index);
-    server_broadcast("a client has left");
-
-    (*client_index)--;
+void client_left(char client_index) {
+    printf("client %d left.\n", client_index);
+    // server_broadcast("a client has left", BROADCAST_ALL);
 }
 
-void *on_data_get(const char *dat) {
-    printf("recieved message '%s' from server\n", dat);
+void server_on_data_get(int sender, char *data) {
+    
+    server_broadcast(data, sender);
 }
 
 void server_start() {
     printf("Join this server using port %d and ip %s!\n", port, ip);
 
     server_init(port, ip);
-    server_listen(on_connect, client_left);
+    server_listen(on_connect, client_left, server_on_data_get);
 }
 
 void client_start() {
     client_init(port, ip);
     // client_send("Hello, server.");
-    client_listen(on_data_get);
+    game_start();
 }
 
 int main(int argc, char *argv[]) {
     client = false;
     
-    int option;
+    int option, i;
     char *ipstr = NULL;
 
     port = NET_DEFAULT_PORT;
@@ -59,11 +61,16 @@ int main(int argc, char *argv[]) {
             case 'i': // Implicit set IP address
                 ipstr = optarg;
                 break;
-            case 'p':
+            case 'p': // Implicit set port
                 if (!strcmp(optarg, "default"))
                     break;
-                printf("arg: %s\n", optarg);
                 port = atoi(optarg);
+                for (i = 0; i < strlen(optarg); i++) {
+                    if (!ISNUM(optarg[i])) {
+                        port = NET_DEFAULT_PORT;
+                        break;
+                    }
+                }
                 break;
             case '?':
                 if (optopt == 'i')
@@ -80,13 +87,13 @@ int main(int argc, char *argv[]) {
                     "   -s: start as server\n"
                     "   -c: start as client\n"
                     "   -i: set ip address\n"
+                    "   -p: set port\n"
                 );
                 return 0;
             default:
                 return 0;
         };
     }
-    int i;
     for (i = optind; i < argc; i++) {
         printf("Unknown argument %s\n", argv[i]);
     }
@@ -116,7 +123,7 @@ int main(int argc, char *argv[]) {
         client_destroy();
     }
     else {
-        printf("Starting server...\n\n");
+        printf("Starting server...\n\nUse Ctrl+C to exit\n");
         server_start();
         server_destroy();
     }

@@ -57,9 +57,81 @@ include CMakeFiles/lib.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/lib.dir/flags.make
 
+CMakeFiles/lib.dir/lib/game.c.o: CMakeFiles/lib.dir/flags.make
+CMakeFiles/lib.dir/lib/game.c.o: /home/ethan/Projects/online-term/src/lib/game.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lib.dir/lib/game.c.o"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/game.c.o   -c /home/ethan/Projects/online-term/src/lib/game.c
+
+CMakeFiles/lib.dir/lib/game.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lib.dir/lib/game.c.i"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ethan/Projects/online-term/src/lib/game.c > CMakeFiles/lib.dir/lib/game.c.i
+
+CMakeFiles/lib.dir/lib/game.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lib.dir/lib/game.c.s"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ethan/Projects/online-term/src/lib/game.c -o CMakeFiles/lib.dir/lib/game.c.s
+
+CMakeFiles/lib.dir/lib/game.c.o.requires:
+
+.PHONY : CMakeFiles/lib.dir/lib/game.c.o.requires
+
+CMakeFiles/lib.dir/lib/game.c.o.provides: CMakeFiles/lib.dir/lib/game.c.o.requires
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/game.c.o.provides.build
+.PHONY : CMakeFiles/lib.dir/lib/game.c.o.provides
+
+CMakeFiles/lib.dir/lib/game.c.o.provides.build: CMakeFiles/lib.dir/lib/game.c.o
+
+
+CMakeFiles/lib.dir/lib/interface/keyboard.c.o: CMakeFiles/lib.dir/flags.make
+CMakeFiles/lib.dir/lib/interface/keyboard.c.o: /home/ethan/Projects/online-term/src/lib/interface/keyboard.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/lib.dir/lib/interface/keyboard.c.o"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/interface/keyboard.c.o   -c /home/ethan/Projects/online-term/src/lib/interface/keyboard.c
+
+CMakeFiles/lib.dir/lib/interface/keyboard.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lib.dir/lib/interface/keyboard.c.i"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ethan/Projects/online-term/src/lib/interface/keyboard.c > CMakeFiles/lib.dir/lib/interface/keyboard.c.i
+
+CMakeFiles/lib.dir/lib/interface/keyboard.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lib.dir/lib/interface/keyboard.c.s"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ethan/Projects/online-term/src/lib/interface/keyboard.c -o CMakeFiles/lib.dir/lib/interface/keyboard.c.s
+
+CMakeFiles/lib.dir/lib/interface/keyboard.c.o.requires:
+
+.PHONY : CMakeFiles/lib.dir/lib/interface/keyboard.c.o.requires
+
+CMakeFiles/lib.dir/lib/interface/keyboard.c.o.provides: CMakeFiles/lib.dir/lib/interface/keyboard.c.o.requires
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/keyboard.c.o.provides.build
+.PHONY : CMakeFiles/lib.dir/lib/interface/keyboard.c.o.provides
+
+CMakeFiles/lib.dir/lib/interface/keyboard.c.o.provides.build: CMakeFiles/lib.dir/lib/interface/keyboard.c.o
+
+
+CMakeFiles/lib.dir/lib/interface/ui.c.o: CMakeFiles/lib.dir/flags.make
+CMakeFiles/lib.dir/lib/interface/ui.c.o: /home/ethan/Projects/online-term/src/lib/interface/ui.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/lib.dir/lib/interface/ui.c.o"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/interface/ui.c.o   -c /home/ethan/Projects/online-term/src/lib/interface/ui.c
+
+CMakeFiles/lib.dir/lib/interface/ui.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lib.dir/lib/interface/ui.c.i"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ethan/Projects/online-term/src/lib/interface/ui.c > CMakeFiles/lib.dir/lib/interface/ui.c.i
+
+CMakeFiles/lib.dir/lib/interface/ui.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lib.dir/lib/interface/ui.c.s"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ethan/Projects/online-term/src/lib/interface/ui.c -o CMakeFiles/lib.dir/lib/interface/ui.c.s
+
+CMakeFiles/lib.dir/lib/interface/ui.c.o.requires:
+
+.PHONY : CMakeFiles/lib.dir/lib/interface/ui.c.o.requires
+
+CMakeFiles/lib.dir/lib/interface/ui.c.o.provides: CMakeFiles/lib.dir/lib/interface/ui.c.o.requires
+	$(MAKE) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/lib/interface/ui.c.o.provides.build
+.PHONY : CMakeFiles/lib.dir/lib/interface/ui.c.o.provides
+
+CMakeFiles/lib.dir/lib/interface/ui.c.o.provides.build: CMakeFiles/lib.dir/lib/interface/ui.c.o
+
+
 CMakeFiles/lib.dir/lib/main.c.o: CMakeFiles/lib.dir/flags.make
 CMakeFiles/lib.dir/lib/main.c.o: /home/ethan/Projects/online-term/src/lib/main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lib.dir/lib/main.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/lib.dir/lib/main.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/main.c.o   -c /home/ethan/Projects/online-term/src/lib/main.c
 
 CMakeFiles/lib.dir/lib/main.c.i: cmake_force
@@ -83,7 +155,7 @@ CMakeFiles/lib.dir/lib/main.c.o.provides.build: CMakeFiles/lib.dir/lib/main.c.o
 
 CMakeFiles/lib.dir/lib/net/client.c.o: CMakeFiles/lib.dir/flags.make
 CMakeFiles/lib.dir/lib/net/client.c.o: /home/ethan/Projects/online-term/src/lib/net/client.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/lib.dir/lib/net/client.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/lib.dir/lib/net/client.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/net/client.c.o   -c /home/ethan/Projects/online-term/src/lib/net/client.c
 
 CMakeFiles/lib.dir/lib/net/client.c.i: cmake_force
@@ -107,7 +179,7 @@ CMakeFiles/lib.dir/lib/net/client.c.o.provides.build: CMakeFiles/lib.dir/lib/net
 
 CMakeFiles/lib.dir/lib/net/net.c.o: CMakeFiles/lib.dir/flags.make
 CMakeFiles/lib.dir/lib/net/net.c.o: /home/ethan/Projects/online-term/src/lib/net/net.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/lib.dir/lib/net/net.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/lib.dir/lib/net/net.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/net/net.c.o   -c /home/ethan/Projects/online-term/src/lib/net/net.c
 
 CMakeFiles/lib.dir/lib/net/net.c.i: cmake_force
@@ -131,7 +203,7 @@ CMakeFiles/lib.dir/lib/net/net.c.o.provides.build: CMakeFiles/lib.dir/lib/net/ne
 
 CMakeFiles/lib.dir/lib/net/server.c.o: CMakeFiles/lib.dir/flags.make
 CMakeFiles/lib.dir/lib/net/server.c.o: /home/ethan/Projects/online-term/src/lib/net/server.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/lib.dir/lib/net/server.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/lib.dir/lib/net/server.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lib.dir/lib/net/server.c.o   -c /home/ethan/Projects/online-term/src/lib/net/server.c
 
 CMakeFiles/lib.dir/lib/net/server.c.i: cmake_force
@@ -155,6 +227,9 @@ CMakeFiles/lib.dir/lib/net/server.c.o.provides.build: CMakeFiles/lib.dir/lib/net
 
 # Object files for target lib
 lib_OBJECTS = \
+"CMakeFiles/lib.dir/lib/game.c.o" \
+"CMakeFiles/lib.dir/lib/interface/keyboard.c.o" \
+"CMakeFiles/lib.dir/lib/interface/ui.c.o" \
 "CMakeFiles/lib.dir/lib/main.c.o" \
 "CMakeFiles/lib.dir/lib/net/client.c.o" \
 "CMakeFiles/lib.dir/lib/net/net.c.o" \
@@ -163,13 +238,16 @@ lib_OBJECTS = \
 # External object files for target lib
 lib_EXTERNAL_OBJECTS =
 
+lib: CMakeFiles/lib.dir/lib/game.c.o
+lib: CMakeFiles/lib.dir/lib/interface/keyboard.c.o
+lib: CMakeFiles/lib.dir/lib/interface/ui.c.o
 lib: CMakeFiles/lib.dir/lib/main.c.o
 lib: CMakeFiles/lib.dir/lib/net/client.c.o
 lib: CMakeFiles/lib.dir/lib/net/net.c.o
 lib: CMakeFiles/lib.dir/lib/net/server.c.o
 lib: CMakeFiles/lib.dir/build.make
 lib: CMakeFiles/lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ethan/Projects/online-term/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C executable lib"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lib.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -177,6 +255,9 @@ CMakeFiles/lib.dir/build: lib
 
 .PHONY : CMakeFiles/lib.dir/build
 
+CMakeFiles/lib.dir/requires: CMakeFiles/lib.dir/lib/game.c.o.requires
+CMakeFiles/lib.dir/requires: CMakeFiles/lib.dir/lib/interface/keyboard.c.o.requires
+CMakeFiles/lib.dir/requires: CMakeFiles/lib.dir/lib/interface/ui.c.o.requires
 CMakeFiles/lib.dir/requires: CMakeFiles/lib.dir/lib/main.c.o.requires
 CMakeFiles/lib.dir/requires: CMakeFiles/lib.dir/lib/net/client.c.o.requires
 CMakeFiles/lib.dir/requires: CMakeFiles/lib.dir/lib/net/net.c.o.requires

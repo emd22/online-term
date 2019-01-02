@@ -4,6 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/home/ethan/Projects/online-term/src/lib/game.c" "/home/ethan/Projects/online-term/build/CMakeFiles/lib.dir/lib/game.c.o"
+  "/home/ethan/Projects/online-term/src/lib/interface/keyboard.c" "/home/ethan/Projects/online-term/build/CMakeFiles/lib.dir/lib/interface/keyboard.c.o"
+  "/home/ethan/Projects/online-term/src/lib/interface/ui.c" "/home/ethan/Projects/online-term/build/CMakeFiles/lib.dir/lib/interface/ui.c.o"
   "/home/ethan/Projects/online-term/src/lib/main.c" "/home/ethan/Projects/online-term/build/CMakeFiles/lib.dir/lib/main.c.o"
   "/home/ethan/Projects/online-term/src/lib/net/client.c" "/home/ethan/Projects/online-term/build/CMakeFiles/lib.dir/lib/net/client.c.o"
   "/home/ethan/Projects/online-term/src/lib/net/net.c" "/home/ethan/Projects/online-term/build/CMakeFiles/lib.dir/lib/net/net.c.o"

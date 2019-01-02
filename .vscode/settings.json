@@ -42,6 +42,7 @@
         "log.h": "c",
         "nstring.h": "c",
         "ioctl.h": "c",
-        "socket.h": "c"
+        "socket.h": "c",
+        "packet.h": "c"
     }
 }
