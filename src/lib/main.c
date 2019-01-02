@@ -25,7 +25,6 @@ void client_left(char client_index) {
 }
 
 void server_on_data_get(int sender, char *data) {
-    
     server_broadcast(data, sender);
 }
 

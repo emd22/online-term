@@ -10,9 +10,10 @@
 #define WIN
 #endif
 
+int client_get_index(void);
 void client_init(int port, const char *ip);
 void client_listen(void (*on_data_get)(char *));
-char *client_read(char *dat);
+char *client_read(char *dat, int size);
 void client_send(const char *dat);
 void client_destroy(void);
 void client_kill(void);

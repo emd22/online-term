@@ -98,12 +98,15 @@ void server_listen(void (*on_connect)(int, int), void (*client_left)(char), void
         usleep(100);
 
         if (server_read_last(buf, &sender) != NULL) {
+            printf("found dat\n");
             if (buf[0] == 0x02 && buf[1] == CLIENT_LEFT) {
                 printf("client %d left.\n", buf[2]);
                 clients[(int)(buf[2])].used = 0;
             }
             on_data_get(sender, buf);
         }
+
+        // printf("fut\n");
 
         // not a successful socket run, check again.
         if (new_sockfd < 0) {
@@ -122,8 +125,17 @@ void server_listen(void (*on_connect)(int, int), void (*client_left)(char), void
         new_client->fd = new_sockfd;
         generate_random_id(new_client);
         new_client->used = true;
-        char meta[] = NET_SEND_CLIENT_META(client_index);
-        server_send(new_sockfd, meta);
+        int i;
+        int amt_players = 0;
+        for (i = 0; i < MAX_CLIENTS; i++) {
+            if (clients[i].used)
+                amt_players++;
+        }
+
+        char meta[] = NET_SEND_CLIENT_META(client_index, amt_players);
+        char pack_data[128];
+        memcpy(pack_data, meta, 5);
+        server_send(new_sockfd, pack_data);
         // successful connection!
         on_connect(new_sockfd, client_index);
     }
@@ -170,7 +182,6 @@ char *server_read_last(char *buf, int *sender) {
     for (i = 0; i < MAX_CLIENTS; i++) {
         if (server_read(clients[i].fd, buf) != NULL) {
             (*sender) = i;
-            printf("%d sent us (%s)\n", i, buf);
             return buf;
         }
     }

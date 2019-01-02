@@ -26,8 +26,13 @@ int port;
 struct sockaddr_in server, server_addr;
 int server_fd;
 void (*kill_callback)(void) = NULL;
+bool initd = false;
 
 bool end;
+
+int client_get_index(void) {
+    return client_info._index;
+}
 
 void client_error(const char *message) {
     printf("Client error: %s --- %s\n", message, strerror(errno));
@@ -39,14 +44,22 @@ void client_set_kill_callback(void (*_kill_callback)(void)) {
 }
 
 void client_kill(void) {
+    if (!initd) {
+        printf("Warning: client_kill trying to exit but is not initialized.\n");
+        return;
+    }
     if (client_info._index != -1) {
+        char out_pack[128];
         char packet[] = NET_LEFT_PACKET(client_info._index);
-        client_send(packet);
+        memcpy(out_pack, packet, 4);
+        client_send(out_pack);
     }
     else
         printf("Warning: Client index == -1\n");
     end = 1;
-    pthread_exit(NULL);
+    initd = false;
+    // pthread_exit(NULL);
+    return;
 }
 
 void cli_sig(int sig) {
@@ -87,13 +100,14 @@ void client_init(int port_, const char *ip) {
     if (connect(client_info.fd, (struct sockaddr *)&server, sizeof(server)) < 0) {
         client_error("Error connecting");
     }
+    initd = true;
 }
 
 void client_listen(void (*on_data_get)(char *)) {
-    char *buf = (char *)malloc(DAT_SIZE);
+    char *buf = (char *)malloc(128);
 
     while (true) {
-        if (client_read(buf) != NULL) {
+        if (client_read(buf, 128) != NULL) {
 
             if (buf[0] == 0x02 && buf[1] == CLIENT_META) {
                 // setup client metadata sent from server
@@ -111,12 +125,12 @@ void client_listen(void (*on_data_get)(char *)) {
     pthread_exit(NULL);
 }
 
-char *client_read(char *dat) {
+char *client_read(char *dat, int size) {
     int rsize = 0;
 
-    memset(dat, 0, 128);
+    memset(dat, 0, size);
 
-    rsize = recv(client_info.fd, dat, 128, 0);
+    rsize = recv(client_info.fd, dat, size, 0);
     
     if (rsize == -1) {
         client_error("Error reading from server");
